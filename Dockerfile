@@ -11,6 +11,4 @@ RUN npm run build
 FROM nginx:latest
 
 # Copy files or artifacts from the previous stage
-COPY --from=build /usr/local/app/dist/  /usr/share/nginx/html
-
-EXPOSE 80
+COPY --from=build /usr/local/app/dist/demoapp  /usr/share/nginx/html
