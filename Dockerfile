@@ -5,7 +5,7 @@ FROM node:latest as build
 WORKDIR /usr/local/app
 COPY ./  /usr/local/app/
 RUN npm install
-RUN npm build
+RUN npm run build
 
 # Stage 2: Use the second image as the final image
 FROM nginx:latest
