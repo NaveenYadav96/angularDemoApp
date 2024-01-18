@@ -8,14 +8,13 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install Angular CLI and project dependencies
-RUN npm install -g @angular/cli \
-    && npm install
+RUN  npm install
 
 # Copy the entire application to the working directory
 COPY . .
 
 # Build the Angular app
-RUN ng build --prod
+RUN npm run build 
 
 # Expose port 80 for the application
 EXPOSE 80
