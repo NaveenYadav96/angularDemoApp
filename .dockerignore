@@ -1,0 +1,8 @@
+**/node_modules/
+**/.git
+**/README.MD
+**/LICENSE
+**/.vscode
+**/coverage
+**/.env
+**/dist
