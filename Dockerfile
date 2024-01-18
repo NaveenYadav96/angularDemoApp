@@ -1,14 +1,24 @@
-# stage 1: Compile and Build angular Codebase
-FROM node:latest as build
+# Use the official Node.js image as the base image
+FROM node:14-alpine
 
-# Install necessary dependencies
-WORKDIR /usr/local/app
-COPY ./  /usr/local/app/
-RUN npm install
-RUN npm run build
+# Set the working directory to /app
+WORKDIR /app
 
-# Stage 2: Use the second image as the final image
-FROM nginx:latest
+# Copy package.json and package-lock.json to the working directory
+COPY package*.json ./
 
-# Copy files or artifacts from the previous stage
-COPY --from=build /usr/local/app/dist/demoapp  /usr/share/nginx/html
+# Install Angular CLI and project dependencies
+RUN npm install -g @angular/cli \
+    && npm install
+
+# Copy the entire application to the working directory
+COPY . .
+
+# Build the Angular app
+RUN ng build --prod
+
+# Expose port 80 for the application
+EXPOSE 80
+
+# Command to run the application
+CMD ["nginx", "-g", "daemon off;"]
