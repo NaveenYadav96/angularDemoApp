@@ -1,23 +1,28 @@
-# Use the official Node.js image as the base image
-FROM node:latest
+# Stage 1: Build Angular app
+FROM node:latest AS builder
 
-# Set the working directory to /app
 WORKDIR /app
 
-# Copy package.json and package-lock.json to the working directory
 COPY package*.json ./
 
-# Install Angular CLI and project dependencies
-RUN  npm install
+RUN npm install
 
-# Copy the entire application to the working directory
 COPY . .
 
-# Build the Angular app
 RUN npm run build 
 
-# Expose port 80 for the application
+# Stage 2: Create Nginx runtime image
+FROM nginx
+
+RUN rm -rf /usr/share/nginx/html/*
+# Copy the built Angular app from Stage 1
+COPY --from=builder /app/dist /usr/share/nginx/html
+
+# Copy custom Nginx configuration if needed
+# COPY nginx.conf /etc/nginx/nginx.conf
+
+# Expose port 80
 EXPOSE 80
 
-# Command to run the application
+# Start Nginx in the foreground
 CMD ["nginx", "-g", "daemon off;"]
